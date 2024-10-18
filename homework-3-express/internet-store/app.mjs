@@ -10,7 +10,8 @@ import cookieParser from "cookie-parser";
 import logger from "morgan";
 import { fileURLToPath } from "url";
 import indexRouter from "./routes/index.mjs";
-import usersRouter from "./routes/users.mjs";
+import productsRouter from "./routes/products.mjs"
+
 const app = express();
 const __filename = fileURLToPath(import.meta.url); // get the resolved path to the
 const __dirname = path.dirname(__filename); // get the name of the directory
@@ -24,6 +25,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 app.use("/", indexRouter);
 app.use("/users", usersRouter);
+app.use('/products', productsRouter)
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {

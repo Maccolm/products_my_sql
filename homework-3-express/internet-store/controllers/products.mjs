@@ -1,8 +1,10 @@
+import Product from "../models/Product.mjs";
 class ProductController {
 	static allProducts(req, res) {
-		
-		res.render('/' , {
+		const productList = Product.loadProductList()
+		res.render('products' , {
 			products: productList
 		})
 	}
 }
+export default ProductController
