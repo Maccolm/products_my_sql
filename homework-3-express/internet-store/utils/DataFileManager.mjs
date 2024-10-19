@@ -18,9 +18,6 @@ class DataFileManager {
   // Метод зчитування усього масиву з файлу
   loadData() {
     try {
-      console.log('------this.filePath')
-      console.log(this.filePath)
-
       const data = fs.readFileSync(this.filePath, 'utf8')
       return JSON.parse(data)
     } catch (err) {

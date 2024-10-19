@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Product list</title>
+</head>
+<body>
+	<div class="container">
+		<% products.forEach(product =>{ %>
+			<div class="product__container">
+				<div class="product__info">
+					<a href="/products/<%=product.id%>"><%= product.title %></a>
+					<p class="product__price"><%= product.price%></p>
+				</div>
+				<div class="product__actions actions">
+					<button class="actions__btn">Edit</button>
+					<button class="actions__btn">Delete</button>
+				</div>
+			</div>
+		<%})%>
+	</div>
+</body>
+</html>

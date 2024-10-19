@@ -1,4 +1,3 @@
-import mainController from '../controllers/mainController.mjs'
 import { Router } from 'express'
 
 const router = Router()
