@@ -9,6 +9,11 @@ body {
 	color: #333;
 	padding: 20px;
 }
+@media screen and (max-width: 768px) {
+	body{
+		padding: 10px;
+	}
+}
 .container {
 	max-width: 900px;
 	margin: 0 auto;
@@ -27,7 +32,6 @@ p {
 img {
 	max-width: 100%;
 	height: auto;
-	margin-bottom: 20px;
 }
 .image-container {
 	display: flex;
@@ -64,7 +68,8 @@ img {
 	align-items: center;
 }
 .wrapper__product{
-	justify-content: center;
+	padding-top: 15px;
+	justify-items: center;
 	width: 100%;
 	display: grid;
 	grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -120,6 +125,7 @@ img {
 }
 .product__container{
 	max-width: 350px;
+	margin-bottom: 25px;
 }
 .product__link{
 	display: block;
@@ -129,10 +135,14 @@ img {
 }
 .product__link > img{
 	transition: all 0.5s ease 0s;
+	margin-bottom: -6px;
 }
 .product__link:hover img{
 	transform: scale(1.1);
 }
 .product__price{
 	font-weight: 600;
+}
+.product__actions{
+	padding: 10px 0;
 }
