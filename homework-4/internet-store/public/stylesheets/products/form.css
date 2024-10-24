@@ -38,3 +38,19 @@ textarea:hover {
 textarea:focus {
 	background-color: #ffffffd4;
 }
+.prod-picture{
+	max-height: 100px;
+	max-width: 100px;
+}
+ul{
+	padding: 0;
+}
+.error__msg{
+	margin-bottom: 5px;
+	list-style-type: none;
+	color: red;
+}
+.error__msg::before{
+	content: "–";
+	padding-right: 5px;
+}

@@ -4,14 +4,15 @@
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<link rel="stylesheet" href="../stylesheets/style.css" />
-		<link rel="stylesheet" href="../stylesheets/details.css" />
+		<link rel="stylesheet" href="../stylesheets/products/details.css" />
 		<title><%=product.title%></title>
 	</head>
 	<body>
 		<div class="wrapper">
+		<a class="main-page__btn" href="/products"><span class="main-page__btn-span"></span> To The Products</a>
 			<div class="details-container">
 				<div class="product__img">
-					<img src="<%=product.img %>" alt="Flowers Img"/>
+					<img src="../<%=product.imgSrc %>" alt="Flowers Img"/>
 				</div>
 				<span class="divider divider-sm"></span>
 				<div class="product__info">
@@ -33,6 +34,6 @@
 				</div>
 			</div>
 		</div>
-		<a class="main-page__btn" href="/products"><span class="main-page__btn-span"></span> To The Products</a>
+		<a class="main-page__btn" href="/"><span class="main-page__btn-span"></span> To The Main Page</a>
 	</body>
 </html>
