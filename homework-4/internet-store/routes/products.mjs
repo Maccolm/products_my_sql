@@ -1,7 +1,7 @@
 import ProductController from '../controllers/products.mjs'
 import { Router } from 'express'
 import multer from 'multer'
-import FormValidator from '../models/formValidator.mjs'
+import FormValidator from '../validators/formValidator.mjs'
 import { checkSchema } from 'express-validator'
 
 const router = Router()
