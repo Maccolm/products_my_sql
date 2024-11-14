@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" href="../stylesheets/style.css">
+	<title>products</title>
+</head>
+<body>
+	<h1><%= title %></h1>
+	<% if(products.length > 0) {%>
+		<ul>
+			<%products.forEach(product => { %>
+				<li><%=`${product.pr_type} - ${product.title} price - ${product.price}, quantity - ${product.quantity}`%></li>
+			<%})%>
+		</ul>
+	<%}%>
+	<div class="actions">
+		<a class="product__btn" href="addProduct.html">Add Product</a>
+		<form action="/logout" method="POST" style="display: inline;">
+			<button type="submit" class="product__btn">Logout</button>
+	  </form>
+	</div>
+</body>
+</html>

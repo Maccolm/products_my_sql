@@ -4,5 +4,21 @@ body {
 }
 
 a {
-  color: #00B7FF;
+	text-decoration: none;
+	color: #000;
+}
+.product__btn {
+	font-family: Roboto Condensed;
+	font-size: 16px;
+	padding: 10px 15px;
+	border-radius: 12px;
+	transition: all 0.3s ease 0s;
+	background-color: #f3e1fa;
+	border: none;
+	cursor: pointer;
+}.product__btn:hover{
+	background-color: #f1cdff;
+}
+.actions {
+	margin-top: 20px;
 }

@@ -4,21 +4,25 @@
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<link rel="stylesheet" href="./stylesheets/form.css" />
-		<title>Login</title>
+		<title>Add product</title>
 	</head>
 	<body>
 		<div class="form-container">
-			<form class="form" action="/login" method="post">
+			<form class="form" action="/addProduct" method="post">
 				<div class="form__section">
-					<label>Username:</label>
-					<input type="text" name="username" />
+					<label>Product</label>
+					<input type="text" name="product" />
 				</div>
 				<div class="form__section">
-					<label>Password:</label>
-					<input type="password" name="password" />
+					<label>Price</label>
+					<input type="text" name="price" />
 				</div>
 				<div class="form__section">
-					<input type="submit" value="Log In" />
+					<label>Quantity</label>
+					<input type="text" name="quantity" />
+				</div>
+				<div class="form__section">
+					<input type="submit" value="Add product" />
 				</div>
 			</form>
 		</div>
