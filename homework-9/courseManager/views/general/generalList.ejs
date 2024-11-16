@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title><%= pageTitle %></title>
+	<script src="/javascripts/ListDataManager.js"></script>
+	<script src="/javascripts/RequestManager.js"></script>
+</head>
+<body>
+	<%- include('../sections/header', { title: '' }) %>
+	<h1><%= headerTitle %></h1>
+	<div id="table-container"></div>
+	<hr/>
+	<a href="<%= addNewRoute %>">Add</a>
+
+	<script>
+		window.onload = function () {
+		const deleteRoute = '<%= deleteRoute %>'
+
+		async function deleteFunction(id) {
+			await RequestManager.deleteRequest(deleteRoute, id)
+			window.location.reload()
+		}
+		const data = <%- JSON.stringify(data) %>
+		const fields = <%- JSON.stringify(fields) %>
+
+		const createLinkFunction = (id) => `<%= editLinkBase %>/${id}`
+
+		const table = ListDataManager.createTableFromList(data, fields, createLinkFunction, deleteFunction)
+		document.getElementById('table-container').append(table)
+	}
+	</script>
+</body>
+</html>

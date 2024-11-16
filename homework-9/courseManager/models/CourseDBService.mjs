@@ -24,7 +24,7 @@ class CourseDBService extends MongooseCRUDManager {
 					}
 				]
 			)
-			return courses
+			return res
 		} catch (error) {
 			console.error(error);
 			return []
@@ -61,3 +61,4 @@ class CourseDBService extends MongooseCRUDManager {
 		}
 	 }
 }
+export default new CourseDBService(Course)
