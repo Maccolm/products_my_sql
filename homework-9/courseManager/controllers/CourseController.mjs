@@ -1,4 +1,7 @@
 import CourseDBService from "../models/CourseDBService.mjs"
+import StudentDBService from '../models/StudentDBService.mjs'
+import { validationResult } from 'express-validator';
+
 
 class CourseController {
 	static async getList(req, res) {
@@ -8,16 +11,22 @@ class CourseController {
 				if(req.query[key]) filters[key] = req.query[key]
 			}
 			const courses = await CourseDBService.getList(filters, null, ['students', 'seminars.responsibleStudent'])
-			res.render('courses/courseList', {
+
+			console.log(courses);
+			
+			return res.render('courses/generalList', {
 				pageTitle: 'Courses',
 				headerTitle: 'List of Courses',
 				fields: { title: 'Title', duration: 'Duration' },
 				data: courses,
-				addNewRoute: '.courses/register',
+				addNewRoute: 'courses/register',
+				addNewStudent: 'students/register',
 				editLinkBase: '/courses/register',
 				deleteRoute: '/courses',
+				message: courses && courses.length === 0 ? 'List is empty, create a course' : null
 			})
 		} catch (err) {
+			console.error(err)
 			res.status(500).json({ error: err.message })
 		}
 	}
@@ -29,14 +38,14 @@ class CourseController {
 			if (id) {
 				courseItem = await CourseDBService.getById(id, ['students', 'seminars.responsibleStudent'])
 			} 
-			const students = await studentDBService.getList()
-			res.render('courses/courseEditForm', {
+			const students = await StudentDBService.getList()
+			res.render('general/generalEditForm', {
 				pageTitle: 'Course Form',
 				headerTitle: id ? 'Edit Course' : 'Create Course',
 				fields: [
 					{ name: 'title', type: 'text', required: true, label: 'Title' },
 					{ name: 'duration', type: 'number', required: true, label: 'Duration (hours)' },
-					{ name: 'students', type: 'multiselect', options: students, label: 'Students' },
+					{ name: 'students', type: 'select', multiple: true, options: students, label: 'Select Students' },
 				],
 				initialValues: courseItem,
 				errors: [],
@@ -53,7 +62,7 @@ class CourseController {
 		const data = req.body
 		if(!errors.isEmpty()) {
 			if (req.params.id) data.id = req.params.id
-			return  res.status(400).render('courses/courseEditForm', {
+			return  res.status(400).render('general/generalEditForm', {
 				pageTitle: 'Course Form',
 				headerTitle: req.params.id ? 'Edit course' : 'Create course',
 				fields: [
@@ -76,7 +85,7 @@ class CourseController {
 			}
 			res.redirect('/courses')
 		} catch (err) {
-			res.status(500).render('courses/courseEditForm', {
+			res.status(500).render('general/generalEditForm', {
 				pageTitle: 'Course Form',
 				headerTitle: req.params.id ? 'Edit Course' : 'Create Course',
 				fields: [

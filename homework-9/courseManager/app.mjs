@@ -4,7 +4,7 @@ import cookieParser from "cookie-parser";
 import logger from "morgan";
 import { fileURLToPath } from "url";
 import indexRouter from "./routes/index.mjs";
-import usersRouter from "./routes/users.mjs";
+import studentsRouter from "./routes/students.mjs";
 
 //----routers-------
 import courseRouter from './routes/courses.mjs'
@@ -26,8 +26,8 @@ app.use(express.static(path.join(__dirname, "public")));
 
 
 app.use("/", indexRouter);
-app.use("/users", usersRouter)
-app.use("/course", courseRouter)
+app.use("/students", studentsRouter)
+app.use("/courses", courseRouter)
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {

@@ -19,7 +19,6 @@ const courseSchema = new Schema({
 	students: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Student' }],
 	seminars: [seminarSchema]
 })
-
 const studentSchema = new Schema({
 	name: {
 		type: String,

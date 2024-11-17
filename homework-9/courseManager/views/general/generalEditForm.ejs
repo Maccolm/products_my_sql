@@ -1,68 +1,79 @@
 <!DOCTYPE html>
 <html lang="uk">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title><%= pageTitle %></title>
-    <script src="/javascripts/RequestManager.js"></script>
-    <script src="/javascripts/FormManager.js"></script>
-    <link rel="stylesheet" href="/stylesheets/main.css" />
 
-    <style>
-      .error-message {
-        color: red;
-        font-size: 0.9em;
-      }
-      .form-container {
-        max-width: 600px;
-        margin: 0 auto;
-      }
-      .field-container {
-        margin-bottom: 15px;
-      }
-    </style>
-  </head>
-  <body>
-    <%- include('../sections/header', { title: '' }) %>
+<head>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>
+		<%= pageTitle %>
+	</title>
+	<script src="/javascripts/RequestManager.js"></script>
+	<style>
+		.error-message {
+			color: red;
+			font-size: 0.9em;
+		}
 
-    <div class="form-container">
-      <h1><%= headerTitle %></h1>
+		.form-container {
+			max-width: 600px;
+			margin: 0 auto;
+		}
 
-      <div id="errors"></div>
-      <div id="container"></div>
-    </div>
+		.field-container {
+			margin-bottom: 15px;
+		}
+	</style>
+</head>
 
-    <script type="module">
-              const fields = <%- JSON.stringify(fields) %>;
-              const initialValues = <%- JSON.stringify(initialValues) %>;
-            const submitUrl = '<%- submitUrl %>';
-            const redirectUrl = '<%- redirectUrl %>';
+<body>
+	<div class="form-container">
+		<h1>
+			<%= headerTitle %>
+		</h1>
 
+		<div id="errors"></div>
+		<div id="container">
+			<form action="<%= submitUrl %>" method="post">
+				<%if(fields.type === 'select') {%>
+					<div class="form__section">
+						<label for="<%= field.name %>"><%= field.label %></label>
+						<select
+							name="<%= field.name %>"
+							id="<%= field.name %>"
+						>
+						<% field.options.forEach(option => { %>
+							<option value="<%= option.id %>" 
+								 <%= (initialValues[field.name] && initialValues[field.name] === option.id) ? 'selected' : '' %>>
+								 <%= option.name %>
+							</option>
+					  <% }) %>
+						</select>
+					</div>
+				<%}%>
+				<% fields.forEach(field => { %>
+					<div class="form__section">
+						<label for="<%= field.name %>"><%= field.label %></label>
+						<input 
+							type="<%= field.type %>"
+							name="<%= field.name %>"
+							id="<%= field.name %>"
+							value="<%= initialValues[field.name] || '' %>"
+							<%= field.required ? 'required' : '' %>
+						/>
+					</div>
+					<%	}) %>
+					<% if (errors && errors.length) { %>
+						<ul>
+							 <% errors.forEach(error => { %>
+								  <li><%= error.msg %></li>
+							 <% }) %>
+						</ul>
+				  <% } %>
+				<button type="submit"> Submit </button>
+			</form>
+		</div>
+	</div>
 
+</body>
 
-      function displayErrors(errorsList) {
-          const errorsContainer = document.getElementById('errors')
-                  errorsContainer.innerHTML=''
-                  const ul = document.createElement('ul')
-                  res.errors.forEach(error=>{
-                      const li = document.createElement('li')
-                      li.innerText=error.message
-                      ul.append(li)
-                  })
-      }
-
-
-            const submitCallback =async (data) => {
-              const res = await RequestManager.doPostRequest(submitUrl, data, redirectUrl);
-              if(res.errors){
-                displayErrors(errors)
-              }
-            };
-
-            document.addEventListener('DOMContentLoaded', () => {
-              const form = new FormManager(fields, submitCallback, initialValues);
-                form.render('container');
-              });
-    </script>
-  </body>
 </html>

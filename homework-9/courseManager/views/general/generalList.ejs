@@ -1,35 +1,47 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title><%= pageTitle %></title>
-	<script src="/javascripts/ListDataManager.js"></script>
-	<script src="/javascripts/RequestManager.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= pageTitle %></title>
+  <script src="/javascripts/RequestManager.js"></script>
+
 </head>
 <body>
-	<%- include('../sections/header', { title: '' }) %>
-	<h1><%= headerTitle %></h1>
-	<div id="table-container"></div>
-	<hr/>
-	<a href="<%= addNewRoute %>">Add</a>
+  <h1><%= headerTitle %></h1>
 
-	<script>
-		window.onload = function () {
-		const deleteRoute = '<%= deleteRoute %>'
-
-		async function deleteFunction(id) {
-			await RequestManager.deleteRequest(deleteRoute, id)
-			window.location.reload()
-		}
-		const data = <%- JSON.stringify(data) %>
-		const fields = <%- JSON.stringify(fields) %>
-
-		const createLinkFunction = (id) => `<%= editLinkBase %>/${id}`
-
-		const table = ListDataManager.createTableFromList(data, fields, createLinkFunction, deleteFunction)
-		document.getElementById('table-container').append(table)
-	}
-	</script>
+  <% if (message) { %>
+    <p><%= message %></p>
+    <a href="<%= addNewRoute %>">Create a new course</a>
+  <% } else { %>
+    <table>
+      <thead>
+        <tr>
+          <% for (const field in fields) { %>
+            <th><%= fields[field] %></th>
+          <% } %>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% data.forEach(course => { %>
+          <tr>
+            <% for (const field in fields) { %>
+              <td><%= course[field] %></td>
+            <% } %>
+            <td>
+              <a href="<%= editLinkBase %>/<%= course._id %>">Edit</a>
+              <form action="<%= deleteRoute %>" method="POST" style="display: inline;">
+                <input type="hidden" name="id" value="<%= course._id %>">
+                <button type="submit">Delete</button>
+              </form>
+            </td>
+          </tr>
+        <% }); %>
+      </tbody>
+    </table>
+    <a href="<%= addNewRoute %>">Create a new course</a>
+    <a href="<%= addNewRoute %>">Add new Student</a>
+  <% } %>
 </body>
 </html>
