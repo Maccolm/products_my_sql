@@ -6,6 +6,6 @@ const router = express.Router()
 router.get('/', StudentController.getList)
 router.get('/register/:id?', StudentController.registerForm)
 router.post('/register/:id?', StudentController.register)
-router.delete('/', StudentController.delete)
+router.delete('/:id', StudentController.delete)
 
 export default router

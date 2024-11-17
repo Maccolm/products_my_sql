@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<script src="/javascripts/RequestManager.js"></script>
+	<title><%= pageTitle %></title>
+</head>
+<body>
+<h1><%= pageTitle %></h1>
+<a href="/students/register">Add New Student</a>
+<div class="container">
+	<table>
+		<tr>
+			<td>Name</td>
+			<td>Age</td>
+			<td>Average Score</td>
+			<td>Actions</td>
+		</tr>
+		<% students.forEach(student => { %>
+			<tr>
+				<td><%= student.name %></td>
+				<td><%= student.age %></td>
+				<td><%= student.averageScore %></td>
+				<td>
+					<a href="/students/register/<%= student._id %>">Edit</a>
+					<button onclick="RequestManager.deleteRequest('/students/<%= student._id %>')">Delete</button>
+				</td>
+			</tr>
+		<% }) %>
+	</table>
+</div>
+
+</body>
+</html>
