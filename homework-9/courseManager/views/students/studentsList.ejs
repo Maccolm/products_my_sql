@@ -5,31 +5,40 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<script src="/javascripts/RequestManager.js"></script>
 	<title><%= pageTitle %></title>
+	<link rel="stylesheet" href="stylesheets/style.css">
 </head>
 <body>
+	<%- include('../sections/header', { title: 'User form' }) %>
 <h1><%= pageTitle %></h1>
-<a href="/students/register">Add New Student</a>
+<% if (message) { %>
+	<p><%= message %></p>
+	<div class="actions__container">
+		<a href="<%= addNewStudent %>" class="btn">Add a New Student</a>
+		<a href="/" class="btn">Home</a>
+	</div>
+ <% } else { %>
+<a href="/students/register" class="btn">Add New Student</a>
 <div class="container">
-	<table>
-		<tr>
-			<td>Name</td>
-			<td>Age</td>
-			<td>Average Score</td>
-			<td>Actions</td>
+	<table class="table">
+		<tr class="row">
+			<th>Name</th>
+			<th>Age</th>
+			<th>Average Score</th>
+			<th>Actions</th>
 		</tr>
 		<% students.forEach(student => { %>
-			<tr>
+			<tr class="row">
 				<td><%= student.name %></td>
 				<td><%= student.age %></td>
 				<td><%= student.averageScore %></td>
 				<td>
-					<a href="/students/register/<%= student._id %>">Edit</a>
-					<button onclick="RequestManager.deleteRequest('/students/<%= student._id %>')">Delete</button>
+					<a href="/students/register/<%= student._id %>" class="btn">Edit</a>
+					<button class="btn" onclick="RequestManager.deleteRequest('/students/<%= student._id %>')">Delete</button>
 				</td>
 			</tr>
 		<% }) %>
 	</table>
 </div>
-
+<% } %>
 </body>
 </html>

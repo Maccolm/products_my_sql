@@ -14,7 +14,7 @@ class CourseController {
 
 			console.log(courses);
 			
-			return res.render('courses/generalList', {
+			return res.render('general/generalList', {
 				pageTitle: 'Courses',
 				headerTitle: 'List of Courses',
 				fields: { title: 'Title', duration: 'Duration' },

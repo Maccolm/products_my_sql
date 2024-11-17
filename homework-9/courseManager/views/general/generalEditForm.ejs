@@ -7,6 +7,7 @@
 	<title>
 		<%= pageTitle %>
 	</title>
+	<link rel="stylesheet" href="/stylesheets/style.css">
 	<script src="/javascripts/RequestManager.js"></script>
 	<style>
 		.error-message {
@@ -26,6 +27,7 @@
 </head>
 
 <body>
+	<%- include('../sections/header', { title: 'User form' }) %>
 	<div class="form-container">
 		<h1>
 			<%= headerTitle %>
@@ -33,7 +35,7 @@
 
 		<div id="errors"></div>
 		<div id="container">
-			<form action="<%= submitUrl %>" method="post">
+			<form action="<%= submitUrl %>" class="form" method="post">
 				<%if(fields.type === 'select') {%>
 					<div class="form__section">
 						<label for="<%= field.name %>"><%= field.label %></label>
@@ -69,7 +71,7 @@
 							 <% }) %>
 						</ul>
 				  <% } %>
-				<button type="submit"> Submit </button>
+				<button class="btn" type="submit"> Submit </button>
 			</form>
 		</div>
 	</div>

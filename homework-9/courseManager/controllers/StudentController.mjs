@@ -6,7 +6,12 @@ class StudentController {
 	static async getList(req, res) {
 		try {
 			const students = await StudentDBService.getList()
-			res.render('students/studentsList', { pageTitle: 'Students', students })
+			res.render('students/studentsList', { 
+				pageTitle: 'Students', 
+				students,
+				addNewStudent: 'students/register',
+				message: students && students.length === 0 ? 'List is empty, add a new student' : null
+			 })
 		} catch (err) {
 			res.status(500).send('Error to get students ' + err.message)
 		}

@@ -3,17 +3,20 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title><%= pageTitle %></title>
   <script src="/javascripts/RequestManager.js"></script>
-
+  <link rel="stylesheet" href="stylesheets/style.css">
+  <title><%= pageTitle %></title>
 </head>
 <body>
+	<%- include('../sections/header', { title: 'User form' }) %>
   <h1><%= headerTitle %></h1>
 
   <% if (message) { %>
     <p><%= message %></p>
-    <a href="<%= addNewRoute %>">Create a new course</a>
-	 <a href="/students">Students</a>
+	 <div class="actions__container">
+		 <a class="btn" href="<%= addNewRoute %>">Create a new course</a>
+		 <a class="btn" href="/students">Students</a>
+	 </div>
   <% } else { %>
     <table>
       <thead>
@@ -41,8 +44,8 @@
         <% }); %>
       </tbody>
     </table>
-    <a href="<%= addNewRoute %>">Create a new course</a>
-    <a href="/students">Students</a>
+    <a class="btn" href="<%= addNewRoute %>">Create a new course</a>
+    <a class="btn" href="/students">Students</a>
   <% } %>
 </body>
 </html>

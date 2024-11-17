@@ -2,7 +2,128 @@ body {
   padding: 50px;
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
 }
-
+li{
+	list-style: none;
+}
 a {
   color: #00B7FF;
+}
+.main-menu ul{
+	display: flex;
+	justify-content: justify;
+	gap: 25px;
+}
+.actions__container{
+	display: flex;
+	gap: 25px;
+}
+.form-container {
+	padding-top: 15px;
+	max-width: 800px;
+	margin: auto;
+}
+.form {
+	width: 100%;
+}
+.form__section {
+	margin-bottom: 20px;
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+} 
+.form__section input, textarea, select {
+	outline: none;
+	transition: all 0.3s ease 0s;
+	padding: 10px;
+	background-color: #e9e6e6d4;
+	border: none;
+	border-bottom: 1px solid #000;
+}
+.form__section input:hover {
+	background-color: #efeeeed4;
+}
+.form__section input:focus {
+	background-color: #ffffffd4;
+}
+textarea{
+	min-height: 83px;
+	height: 83px;
+	max-height: 350px;
+	resize: vertical;
+}
+textarea:hover {
+	background-color: #efeeeed4;
+}
+textarea:focus {
+	background-color: #ffffffd4;
+}
+.prod-picture{
+	max-height: 100px;
+	max-width: 100px;
+}
+ul{
+	padding: 0;
+}
+.error__msg{
+	margin-bottom: 5px;
+	list-style-type: none;
+	color: red;
+}
+.error__msg::before{
+	content: "–";
+	padding-right: 5px;
+}
+
+
+
+.table {
+	border-collapse: collapse;
+	margin: 25px 0;
+	font-size: 18px;
+	font-family: Arial, sans-serif;
+	width: 100%;
+	box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+ }
+ 
+ .table thead tr {
+	background-color: #0A3E52; 
+	color: #fff;
+	text-align: left;
+ }
+ 
+ .table th,
+ .table td {
+	padding: 12px 15px;
+	border: 1px solid #ddd; 
+ }
+ 
+ .table tbody tr {
+	border-bottom: 1px solid #ddd;
+ }
+ 
+ .table tbody tr:nth-of-type(even) {
+	background-color: #f3f3f3; 
+ }
+ 
+ .table tbody tr:last-of-type {
+	border-bottom: 2px solid #0A3E52; 
+ }
+ 
+ .table tbody tr.row {
+	font-weight: bold;
+	color: #0A3E52;
+	background-color: #73b9fe0b; 
+ }
+ 
+.btn{
+	background: none;
+	background-color: #38464c;
+	text-decoration: none;
+	padding: 5px 15px;
+	border-radius: 12px;
+	cursor: pointer;
+	color: #ddd;
+	font-weight: 500;
+	font-size: 16px;
+	border: 0;
 }
