@@ -8,6 +8,11 @@
 	<%- include('sections/header', { title: 'User form' }) %>
 
     <h1><%= title %></h1>
-    <p>Welcome to <%= title %></p>
+    <p>Lets start</p>
+	 <div class="actions">
+		<a href="<%= addNewRoute %>" class="btn">Add A New Course</a>
+		<a href="<%= addNewStudent %>" class="btn">Add A New Student</a>
+		<a href="<%= courseRoute %>" class="btn">Look into courses</a>
+	 </div>
   </body>
 </html>

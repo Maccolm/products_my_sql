@@ -36,23 +36,24 @@
 		<div id="errors"></div>
 		<div id="container">
 			<form action="<%= submitUrl %>" class="form" method="post">
-				<%if(fields.type === 'select') {%>
-					<div class="form__section">
-						<label for="<%= field.name %>"><%= field.label %></label>
-						<select
-							name="<%= field.name %>"
-							id="<%= field.name %>"
-						>
-						<% field.options.forEach(option => { %>
-							<option value="<%= option.id %>" 
-								 <%= (initialValues[field.name] && initialValues[field.name] === option.id) ? 'selected' : '' %>>
-								 <%= option.name %>
-							</option>
-					  <% }) %>
-						</select>
-					</div>
-				<%}%>
 				<% fields.forEach(field => { %>
+					<%if(field.type === 'select') {%>
+						<div class="form__section">
+							<label for="<%= field.name %>"><%= field.label %></label>
+							<select
+								name="<%= field.name %>"
+								id="<%= field.name %>"
+								multiple
+							>
+							<% field.options.forEach(option => { %>
+								<option value="<%= option.id %>" 
+									 <%= (initialValues[field.name] && initialValues[field.name] === option.id) ? 'selected' : '' %>>
+									 <%= option.name %>
+								</option>
+						  <% }) %>
+							</select>
+						</div>
+					<%} else {%>
 					<div class="form__section">
 						<label for="<%= field.name %>"><%= field.label %></label>
 						<input 
@@ -63,6 +64,7 @@
 							<%= field.required ? 'required' : '' %>
 						/>
 					</div>
+					<% } %>
 					<%	}) %>
 					<% if (errors && errors.length > 0) { %>
 						<ul>

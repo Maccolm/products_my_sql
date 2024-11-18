@@ -18,7 +18,7 @@
 		 <a class="btn" href="/students">Students</a>
 	 </div>
   <% } else { %>
-    <table>
+    <table class="table">
       <thead>
         <tr>
           <% for (const field in fields) { %>
@@ -31,14 +31,11 @@
         <% data.forEach(course => { %>
           <tr>
             <% for (const field in fields) { %>
-              <td><%= course[field] %></td>
+              <td class="row"><%= course[field] %></td>
             <% } %>
             <td>
-              <a href="<%= editLinkBase %>/<%= course._id %>">Edit</a>
-              <form action="<%= deleteRoute %>" method="POST" style="display: inline;">
-                <input type="hidden" name="id" value="<%= course._id %>">
-                <button type="submit">Delete</button>
-              </form>
+              <a class="btn" href="<%= editLinkBase %>/<%= course._id %>">Edit</a>
+           	<button class="btn" onclick="RequestManager.deleteRequest('/courses/<%= course._id %>')">Delete</button>
             </td>
           </tr>
         <% }); %>

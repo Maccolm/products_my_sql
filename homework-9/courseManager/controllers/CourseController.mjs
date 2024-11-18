@@ -17,8 +17,11 @@ class CourseController {
 			return res.render('general/generalList', {
 				pageTitle: 'Courses',
 				headerTitle: 'List of Courses',
-				fields: { title: 'Title', duration: 'Duration' },
-				data: courses,
+				fields: { title: 'Title', duration: 'Duration', students: 'Students' , seminars: 'Seminars' },
+				data: courses.map(course => ({
+					...course,
+					students: course.students.map(student => student.name).join(', '),
+				})),
 				addNewRoute: 'courses/register',
 				addNewStudent: 'students/register',
 				editLinkBase: '/courses/register',
@@ -45,7 +48,15 @@ class CourseController {
 				fields: [
 					{ name: 'title', type: 'text', required: true, label: 'Title' },
 					{ name: 'duration', type: 'number', required: true, label: 'Duration (hours)' },
-					{ name: 'students', type: 'select', multiple: true, options: students, label: 'Select Students' },
+					{ 
+						name: 'students', 
+						type: 'select', 
+						multiple: true,
+						options: students.map(student => ({
+							id: student._id,
+							name: `${student.name}`
+						})), 
+						label: 'Select Students' },
 				],
 				initialValues: courseItem,
 				errors: [],
@@ -68,6 +79,15 @@ class CourseController {
 				fields: [
 					{ name: 'title', type: 'text', required: true, label: 'Title' },
 					{ name: 'duration', type: 'number', required: true, label: 'Duration (hours)' },
+					{ 
+						name: 'students', 
+						type: 'select', 
+						multiple: true,
+						options: students.map(student => ({
+							id: student._id,
+							name: `${student.name}`
+						})), 
+						label: 'Select Students' },
 				],
 				initialValues: data,
 				errors: errors.array(),
@@ -77,6 +97,8 @@ class CourseController {
 		}
 		try {
 			const { title, duration, students } = req.body
+			console.log(students);
+			
 			const dataObj = { title, duration, students }
 			if (req.params.id) {
 				await CourseDBService.update(req.params.id, dataObj)
@@ -91,6 +113,15 @@ class CourseController {
 				fields: [
 					{ name: 'title', type: 'text', required: true, label: 'Title' },
 					{ name: 'duration', type: 'number', required: true, label: 'Duration (hours)' },
+					{ 
+						name: 'students', 
+						type: 'select', 
+						multiple: true,
+						options: students.map(student => ({
+							id: student._id,
+							name: `${student.name}`
+						})), 
+						label: 'Select Students' },
 				],
 				initialValues: data,
 				errors: [{ msg: err.message }],

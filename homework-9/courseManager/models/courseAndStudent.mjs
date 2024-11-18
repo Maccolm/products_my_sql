@@ -8,7 +8,7 @@ const seminarSchema = new Schema({
 })
 
 const courseSchema = new Schema({
-	name: {
+	title: {
 		type: String,
 		required: true
 	},
