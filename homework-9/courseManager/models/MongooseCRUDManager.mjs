@@ -26,10 +26,18 @@ class MongooseCRUDManager {
 			const results = await query.exec();
 			return results.map((doc) => ({
 				...doc.toObject(),
-				students: doc.students.map((s) => ({
+				students: Array.isArray(doc.students) 
+				? doc.students.map((s) => ({
 					id: s.student?._id || s._id,
 					name: s.student?.name || s.name,
-				})),
+				})) : [],
+				seminars: Array.isArray(doc.seminars)
+				? doc.seminars.map((seminar) => ({
+					topic: seminar.topic,
+					responsibleStudent: seminar.responsibleStudent?.name || '',
+					duration: seminar.duration,
+				}))
+				: [],
 			}));
 		} catch (error) {
 			throw new Error("Error retrieving data: " + error.message);

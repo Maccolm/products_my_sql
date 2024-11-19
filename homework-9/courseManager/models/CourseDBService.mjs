@@ -21,6 +21,11 @@ class CourseDBService extends MongooseCRUDManager {
 					{
 						fieldForPopulation: 'students.student',
 						requiredFieldsFromTargetObject: 'name',
+					},
+					'seminars', 
+					{
+						fieldForPopulation: 'seminars',
+						requiredFieldsFromTargetObject: 'name',
 					}
 				]
 			)

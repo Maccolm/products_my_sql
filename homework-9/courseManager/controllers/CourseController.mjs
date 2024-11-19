@@ -56,7 +56,24 @@ class CourseController {
 							id: student._id,
 							name: `${student.name}`
 						})), 
-						label: 'Select Students' },
+						label: 'Select Students' 
+					},
+					{
+						name: 'seminars',
+						type: 'dynamic',
+						label: 'Seminars',
+						fields: [
+							{ name: 'responsibleStudent',
+								type: 'select',
+								label: 'Responsible Student',
+								options: students.map(student => ({
+									id: student._id,
+									name: `${student.name}`,
+								})),
+							 },
+							 { name: 'duration',  type: 'number', label: 'Lecture Duration', required: true},
+						]
+					}
 				],
 				initialValues: courseItem,
 				errors: [],
@@ -87,7 +104,26 @@ class CourseController {
 							id: student._id,
 							name: `${student.name}`
 						})), 
-						label: 'Select Students' },
+						label: 'Select Students' 
+					},
+					{
+						name: 'seminars',
+						type: 'dynamic',
+						label: 'Seminars',
+						fields: [
+							{ name: 'topic', type: 'text', label: 'Topic', required: true },
+							{ 	
+								name: 'responsibleStudent',
+								type: 'select',
+								label: 'Responsible Student',
+								options: students.map((student) => ({
+									id: student._id,
+									name: `${student.name}`,
+								})),
+							 },
+							 { name: 'duration',  type: 'number', label: 'Lecture Duration', required: true},
+						]
+					}
 				],
 				initialValues: data,
 				errors: errors.array(),
@@ -96,10 +132,15 @@ class CourseController {
 			})
 		}
 		try {
-			const { title, duration, students } = req.body
+			const { title, duration, students, seminars } = req.body
 			console.log(students);
 			
-			const dataObj = { title, duration, students }
+			const dataObj = { title, duration, students,   
+				seminars: seminars.map((seminar) => ({
+				topic: seminar.topic,
+				responsibleStudent: seminar.responsibleStudent,
+				duration: seminar.duration,
+			 })), }
 			if (req.params.id) {
 				await CourseDBService.update(req.params.id, dataObj)
 			} else {
@@ -122,6 +163,22 @@ class CourseController {
 							name: `${student.name}`
 						})), 
 						label: 'Select Students' },
+						{
+							name: 'seminars',
+							type: 'dynamic',
+							label: 'Seminars',
+							fields: [
+								{ name: 'responsibleStudent',
+									type: 'select',
+									label: 'Responsible Student',
+									options: students.map((student) => ({
+										id: student._id,
+										name: `${student.name}`,
+									})),
+								 },
+								 { name: 'duration',  type: 'number', label: 'Lecture Duration', required: true},
+							]
+						}
 				],
 				initialValues: data,
 				errors: [{ msg: err.message }],

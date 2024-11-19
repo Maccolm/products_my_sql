@@ -53,7 +53,39 @@
 						  <% }) %>
 							</select>
 						</div>
-					<%} else {%>
+					<%} else if(field.type === 'dynamic') {%>
+						<div id="<%=field.name%>-container" class="form__section dynamic-section">
+							<label for="<%= field.name %>"><%= field.label %></label>
+							<% (initialValues[field.name] || []).forEach((item, index) => { %>
+								<div class="dynamic-group">
+									<label for="<%= field.label %>">Seminar Topic</label>
+									<input 
+										type="<%= field.type %>"
+										name="<%= field.name %>[<%= index %>][topic]"
+										id="<%= field.type %>"
+										value="<%= item.topic || '' %>"
+										required
+									>
+									<label> <%= field.label %> </label>
+									<select name="<%= field.name %>[<%= index %>][responsibleStudent]" >
+										<% field.fields[0].options.forEach(option => { %>
+											<option value="<%= option.id %>" <%= item.responsibleStudent ===option.id ? 'selected' : '' %> >
+												<%= option.name %>
+											</option>
+										<% }) %>
+									</select>
+
+									<label for="<%= item.name %>"><%= item.label %></label>
+									<input 
+										type="<%= item.type %>"
+										name="<%= field.name %>[<%= index %>][duration]"
+										value="<%= item.duration || '' %>"
+										required
+										/>
+								</div>
+								<button type="button" class="btn" onclick="addDynamicField('<%= field.name %>', <%- JSON.stringify(field.fields) %>)" >Add</button>
+							<% }) %>
+					<% } else {%>	
 					<div class="form__section">
 						<label for="<%= field.name %>"><%= field.label %></label>
 						<input 
@@ -65,7 +97,6 @@
 						/>
 					</div>
 					<% } %>
-					<%	}) %>
 					<% if (errors && errors.length > 0) { %>
 						<ul>
 							 <% errors.forEach(error => { %>
@@ -77,7 +108,28 @@
 			</form>
 		</div>
 	</div>
+	<script>
+		function addDynamicField(fieldName, fieldConfig) {
+			const container = document.getElementById(`${fieldName}-container`);
+			const index = container.children.length;
+			const group = document.createElement('div');
+			group.classList.add('dynamic-group');
+			group.innerHTML = `
+				<label>Seminar Topic</label>
+				<input type="text" name="${fieldName}[${index}][topic]" required />
 
+				<label>Responsible Student</label>
+				<select name="${fieldName}[${index}][responsibleStudent]">
+					${fieldConfig[0].options.map(option => `
+						<option value="${option.id}">${option.name}</option>
+					`).join('')}
+				</select>
+
+				<label>Lecture Duration</label>
+				<input type="number" name="${fieldName}[${index}][duration]" required />
+			`;
+			container.appendChild(group)
+		}
+	</script>
 </body>
-
 </html>
