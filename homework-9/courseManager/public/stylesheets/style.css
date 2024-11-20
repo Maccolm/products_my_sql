@@ -45,6 +45,18 @@ a {
 .form__section input:focus {
 	background-color: #ffffffd4;
 }
+.dynamic-group {
+	margin-top: 10px;
+	padding: 10px;
+	border: 1px dashed #aaa;
+ }
+ .form-container {
+	max-width: 600px;
+	margin: 0 auto;
+	padding: 20px;
+	border: 1px solid #ccc;
+	border-radius: 8px;
+ }
 textarea{
 	min-height: 83px;
 	height: 83px;

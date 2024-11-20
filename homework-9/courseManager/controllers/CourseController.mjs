@@ -10,7 +10,7 @@ class CourseController {
 			for (const key in req.query) {
 				if(req.query[key]) filters[key] = req.query[key]
 			}
-			const courses = await CourseDBService.getList(filters, null, ['students', 'seminars.responsibleStudent'])
+			const courses = await CourseDBService.getList(filters, null, ['students', 'seminars'])
 
 			console.log(courses);
 			
@@ -88,6 +88,8 @@ class CourseController {
 	static async register(req, res) {
 		const errors = validationResult(req)
 		const data = req.body
+		const isEdit = Boolean(req.params.id)
+		const submitUrl = `/courses/register${isEdit ? `/${req.params.id}` : ''}`
 		if(!errors.isEmpty()) {
 			if (req.params.id) data.id = req.params.id
 			return  res.status(400).render('general/generalEditForm', {

@@ -1,135 +1,124 @@
 <!DOCTYPE html>
-<html lang="uk">
+<html lang="en">
 
 <head>
-	<meta charset="UTF-8" />
-	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-	<title>
-		<%= pageTitle %>
-	</title>
-	<link rel="stylesheet" href="/stylesheets/style.css">
-	<script src="/javascripts/RequestManager.js"></script>
-	<style>
-		.error-message {
-			color: red;
-			font-size: 0.9em;
-		}
-
-		.form-container {
-			max-width: 600px;
-			margin: 0 auto;
-		}
-
-		.field-container {
-			margin-bottom: 15px;
-		}
-	</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= pageTitle %></title>
+  <link rel="stylesheet" href="/stylesheets/style.css">
+  <style>
+    .error-message {
+      color: red;
+      font-size: 0.9em;
+    }
+  </style>
 </head>
 
 <body>
-	<%- include('../sections/header', { title: 'User form' }) %>
-	<div class="form-container">
-		<h1>
-			<%= headerTitle %>
-		</h1>
+  <% include('../sections/header', { title: 'Course Form' }) %>
 
-		<div id="errors"></div>
-		<div id="container">
-			<form action="<%= submitUrl %>" class="form" method="post">
-				<% fields.forEach(field => { %>
-					<%if(field.type === 'select') {%>
-						<div class="form__section">
-							<label for="<%= field.name %>"><%= field.label %></label>
-							<select
-								name="<%= field.name %>"
-								id="<%= field.name %>"
-								multiple
-							>
-							<% field.options.forEach(option => { %>
-								<option value="<%= option.id %>" 
-									 <%= (initialValues[field.name] && initialValues[field.name] === option.id) ? 'selected' : '' %>>
-									 <%= option.name %>
-								</option>
-						  <% }) %>
-							</select>
-						</div>
-					<%} else if(field.type === 'dynamic') {%>
-						<div id="<%=field.name%>-container" class="form__section dynamic-section">
-							<label for="<%= field.name %>"><%= field.label %></label>
-							<% (initialValues[field.name] || []).forEach((item, index) => { %>
-								<div class="dynamic-group">
-									<label for="<%= field.label %>">Seminar Topic</label>
-									<input 
-										type="<%= field.type %>"
-										name="<%= field.name %>[<%= index %>][topic]"
-										id="<%= field.type %>"
-										value="<%= item.topic || '' %>"
-										required
-									>
-									<label> <%= field.label %> </label>
-									<select name="<%= field.name %>[<%= index %>][responsibleStudent]" >
-										<% field.fields[0].options.forEach(option => { %>
-											<option value="<%= option.id %>" <%= item.responsibleStudent ===option.id ? 'selected' : '' %> >
-												<%= option.name %>
-											</option>
-										<% }) %>
-									</select>
+  <div class="form-container">
+    <h1><%= headerTitle %></h1>
 
-									<label for="<%= item.name %>"><%= item.label %></label>
-									<input 
-										type="<%= item.type %>"
-										name="<%= field.name %>[<%= index %>][duration]"
-										value="<%= item.duration || '' %>"
-										required
-										/>
-								</div>
-								<button type="button" class="btn" onclick="addDynamicField('<%= field.name %>', <%- JSON.stringify(field.fields) %>)" >Add</button>
-							<% }) %>
-					<% } else {%>	
-					<div class="form__section">
-						<label for="<%= field.name %>"><%= field.label %></label>
-						<input 
-							type="<%= field.type %>"
-							name="<%= field.name %>"
-							id="<%= field.name %>"
-							value="<%= initialValues[field.name] || '' %>"
-							<%= field.required ? 'required' : '' %>
-						/>
-					</div>
-					<% } %>
-					<% if (errors && errors.length > 0) { %>
-						<ul>
-							 <% errors.forEach(error => { %>
-								  <li><%= error.msg %></li>
-							 <% }) %>
-						</ul>
-				  <% } %>
-				<button class="btn" type="submit"> Submit </button>
-			</form>
-		</div>
-	</div>
-	<script>
-		function addDynamicField(fieldName, fieldConfig) {
-			const container = document.getElementById(`${fieldName}-container`);
-			const index = container.children.length;
-			const group = document.createElement('div');
-			group.classList.add('dynamic-group');
-			group.innerHTML = `
-				<label>Seminar Topic</label>
-				<input type="text" name="${fieldName}[${index}][topic]" required />
+    <% if (errors && errors.length > 0) { %>
+      <div class="error-message">
+        <ul>
+          <% errors.forEach(error => { %>
+            <li><%= error.msg %></li>
+          <% }) %>
+        </ul>
+      </div>
+    <% } %>
 
-				<label>Responsible Student</label>
-				<select name="${fieldName}[${index}][responsibleStudent]">
-					${fieldConfig[0].options.map(option => `
-						<option value="${option.id}">${option.name}</option>
-					`).join('')}
-				</select>
+    <form action="<%= submitUrl %>" method="post">
+      <% fields.forEach(field => { %>
+        <% if (field.type === 'text' || field.type === 'number') { %>
+          <div class="form__section">
+            <label for="<%= field.name %>"><%= field.label %></label>
+            <input type="<%= field.type %>" name="<%= field.name %>" id="<%= field.name %>"
+              value="<%= initialValues[field.name] || '' %>" <%= field.required ? 'required' : '' %>>
+          </div>
+        <% } else if (field.type === 'select') { %>
+          <div class="form__section">
+            <label for="<%= field.name %>"><%= field.label %></label>
+            <select name="<%= field.name %>" id="<%= field.name %>" <%= field.multiple ? 'multiple' : '' %>>
+              <% field.options.forEach(option => { %>
+                <option value="<%= option.id %>" <%= (Array.isArray(initialValues[field.name]) 
+                  ? initialValues[field.name].includes(option.id) 
+                  : initialValues[field.name] === option.id) ? 'selected' : '' %> >
+                  <%= option.name %>
+                </option>
+              <% }) %>
+            </select>
+          </div>
+        <% } else if (field.type === 'dynamic') { %>
+          <div id="<%= field.name %>-container" class="form__section">
+            <label for="<%= field.name %>"><%= field.label %></label>
+            <% (initialValues[field.name] || []).forEach((item, index) => { %>
+              <div class="dynamic-group">
+                <% field.fields.forEach(subField => { %>
+                  <label for="<%= subField.name %>"><%= subField.label %></label>
+                  <% if (subField.type === 'text' || subField.type === 'number') { %>
+                    <input type="<%= subField.type %>" 
+                           name="<%= field.name %>[<%= index %>][<%= subField.name %>]" 
+                           value="<%= item[subField.name] || '' %>" 
+                           <%= subField.required ? 'required' : '' %>>
+                  <% } else if (subField.type === 'select') { %>
+                    <select name="<%= field.name %>[<%= index %>][<%= subField.name %>]">
+                      <% subField.options.forEach(option => { %>
+                        <option value="<%= option.id %>" <%= item[subField.name] === option.id ? 'selected' : '' %> >
+                          <%= option.name %>
+                        </option>
+                      <% }) %>
+                    </select>
+                  <% } %>
+                <% }) %>
+              </div>
+            <% }) %>
+            <button type="button" class="btn" onclick="addDynamicField('<%= field.name %>', <%- JSON.stringify(field.fields) %>)">
+              Add Seminar
+            </button>
+          </div>
+        <% } %>
+      <% }) %>
+      <button type="submit" class="btn">Submit</button>
+    </form>
+  </div>
 
-				<label>Lecture Duration</label>
-				<input type="number" name="${fieldName}[${index}][duration]" required />
+  <script>
+	function addDynamicField(fieldName, fieldSchema) {
+	  const container = document.querySelector(`[data-field-name="${fieldName}"]`);
+	  if (!container) return;
+ 
+	  const fieldsetCount = container.querySelectorAll('fieldset').length;
+	  const newFieldset = document.createElement('fieldset');
+ 
+	  fieldSchema.forEach(field => {
+		 if (field.type === 'select') {
+			const select = document.createElement('select');
+			select.name = `${fieldName}[${fieldsetCount}][${field.name}]`;
+			select.className = 'form-control';
+			field.options.forEach(option => {
+			  const opt = document.createElement('option');
+			  opt.value = option.id;
+			  opt.textContent = option.name;
+			  select.appendChild(opt);
+			});
+			newFieldset.innerHTML += `<label>${field.label}</label>`;
+			newFieldset.appendChild(select);
+		 } else if (field.type === 'number') {
+			newFieldset.innerHTML += `
+			  <label>${field.label}</label>
+			  <input type="number" name="${fieldName}[${fieldsetCount}][${field.name}]" class="form-control" required>
 			`;
-			container.appendChild(group)
-		}
-	</script>
+		 }
+	  });
+ 
+	  container.insertBefore(newFieldset, container.lastChild);
+	}
+ </script>
+ 
+ 
 </body>
+
 </html>
