@@ -5,7 +5,6 @@ const seminarSchema = new Schema({
 	topic: { type: String, required: true},
 	responsibleStudent: { type: mongoose.Schema.Types.ObjectId, ref: 'Student' },
 	duration: {type: Number, required: true },
-	default: []
 })
 
 const courseSchema = new Schema({

@@ -63,6 +63,11 @@ class CourseController {
 						type: 'dynamic',
 						label: 'Seminars',
 						fields: [
+							{
+								name: 'topic',
+								type: 'text',
+								label: 'Seminar Topic',
+							},
 							{ name: 'responsibleStudent',
 								type: 'select',
 								label: 'Responsible Student',
@@ -138,11 +143,8 @@ class CourseController {
 			console.log(students);
 			
 			const dataObj = { title, duration, students,   
-				seminars: seminars.map((seminar) => ({
-				topic: seminar.topic,
-				responsibleStudent: seminar.responsibleStudent,
-				duration: seminar.duration,
-			 })), }
+				seminars: seminars ? Object.values(seminars) : []	
+			 }
 			if (req.params.id) {
 				await CourseDBService.update(req.params.id, dataObj)
 			} else {

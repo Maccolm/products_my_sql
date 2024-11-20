@@ -86,36 +86,51 @@
   </div>
 
   <script>
-	function addDynamicField(fieldName, fieldSchema) {
-	  const container = document.querySelector(`[data-field-name="${fieldName}"]`);
-	  if (!container) return;
- 
-	  const fieldsetCount = container.querySelectorAll('fieldset').length;
-	  const newFieldset = document.createElement('fieldset');
- 
-	  fieldSchema.forEach(field => {
-		 if (field.type === 'select') {
-			const select = document.createElement('select');
-			select.name = `${fieldName}[${fieldsetCount}][${field.name}]`;
-			select.className = 'form-control';
-			field.options.forEach(option => {
-			  const opt = document.createElement('option');
-			  opt.value = option.id;
-			  opt.textContent = option.name;
-			  select.appendChild(opt);
-			});
-			newFieldset.innerHTML += `<label>${field.label}</label>`;
-			newFieldset.appendChild(select);
-		 } else if (field.type === 'number') {
-			newFieldset.innerHTML += `
-			  <label>${field.label}</label>
-			  <input type="number" name="${fieldName}[${fieldsetCount}][${field.name}]" class="form-control" required>
-			`;
-		 }
-	  });
- 
-	  container.insertBefore(newFieldset, container.lastChild);
-	}
+function addDynamicField(containerId, fields) {
+  const container = document.querySelector(`#${containerId}-container`);
+  if (!container) {
+    console.error(`Container with ID ${containerId}-container not found.`);
+    return;
+  }
+
+  const fieldset = document.createElement('fieldset');
+  fieldset.classList.add('dynamic-field');
+
+  fields.forEach(field => {
+    const fieldWrapper = document.createElement('div');
+    fieldWrapper.classList.add('form-group');
+
+    const label = document.createElement('label');
+    label.innerText = field.label;
+    label.for = field.name;
+    fieldWrapper.appendChild(label);
+
+    let inputElement;
+    if (field.type === 'select') {
+      inputElement = document.createElement('select');
+      inputElement.name = `${containerId}[${container.children.length}][${field.name}]`;
+
+      field.options.forEach(option => {
+        const opt = document.createElement('option');
+        opt.value = option.id;
+        opt.textContent = option.name;
+        inputElement.appendChild(opt);
+      });
+    } else {
+      inputElement = document.createElement('input');
+      inputElement.type = field.type;
+      inputElement.name = `${containerId}[${container.children.length}][${field.name}]`;
+      inputElement.required = field.required || false;
+    }
+
+    inputElement.classList.add('form-control');
+    fieldWrapper.appendChild(inputElement);
+
+    fieldset.appendChild(fieldWrapper);
+  });
+
+  container.appendChild(fieldset);
+}
  </script>
  
  
