@@ -4,6 +4,43 @@ import { validationResult } from 'express-validator';
 
 
 class CourseController {
+	static getFields(students) {
+		return [
+			{ name: 'title', type: 'text', required: true, label: 'Title' },
+			{ name: 'duration', type: 'number', required: true, label: 'Duration (hours)' },
+			{ 
+				name: 'students', 
+				type: 'select', 
+				multiple: true,
+				options: students.map(student => ({
+					id: student._id,
+					name: `${student.name}`
+				})), 
+				label: 'Select Students' 
+			},
+			{
+				name: 'seminars',
+				type: 'dynamic',
+				label: 'Seminars',
+				fields: [
+					{
+						name: 'topic',
+						type: 'text',
+						label: 'Seminar Topic',
+					},
+					{ name: 'responsibleStudent',
+						type: 'select',
+						label: 'Responsible Student',
+						options: students.map(student => ({
+							id: student._id,
+							name: `${student.name}`,
+						})),
+					 },
+					 { name: 'duration',  type: 'number', label: 'Lecture Duration', required: true},
+				]
+			}
+		]
+	}
 	static async getList(req, res) {
 		try {
 			const filters = {}
@@ -12,8 +49,6 @@ class CourseController {
 			}
 			const courses = await CourseDBService.getList(filters, null, ['students', 'seminars'])
 
-			console.log(courses);
-			
 			return res.render('general/generalList', {
 				pageTitle: 'Courses',
 				headerTitle: 'List of Courses',
@@ -21,6 +56,7 @@ class CourseController {
 				data: courses.map(course => ({
 					...course,
 					students: course.students.map(student => student.name).join(', '),
+					seminars: course.seminars.map(seminar => `${seminar.topic} (Duration: ${seminar.duration} hours, ${seminar.responsibleStudent?.name})`).join(', ')
 				})),
 				addNewRoute: 'courses/register',
 				addNewStudent: 'students/register',
@@ -45,41 +81,7 @@ class CourseController {
 			res.render('general/generalEditForm', {
 				pageTitle: 'Course Form',
 				headerTitle: id ? 'Edit Course' : 'Create Course',
-				fields: [
-					{ name: 'title', type: 'text', required: true, label: 'Title' },
-					{ name: 'duration', type: 'number', required: true, label: 'Duration (hours)' },
-					{ 
-						name: 'students', 
-						type: 'select', 
-						multiple: true,
-						options: students.map(student => ({
-							id: student._id,
-							name: `${student.name}`
-						})), 
-						label: 'Select Students' 
-					},
-					{
-						name: 'seminars',
-						type: 'dynamic',
-						label: 'Seminars',
-						fields: [
-							{
-								name: 'topic',
-								type: 'text',
-								label: 'Seminar Topic',
-							},
-							{ name: 'responsibleStudent',
-								type: 'select',
-								label: 'Responsible Student',
-								options: students.map(student => ({
-									id: student._id,
-									name: `${student.name}`,
-								})),
-							 },
-							 { name: 'duration',  type: 'number', label: 'Lecture Duration', required: true},
-						]
-					}
-				],
+				fields: CourseController.getFields(students),
 				initialValues: courseItem,
 				errors: [],
 				submitUrl: '/courses/register' + (id ? `/${id}` : ''),
@@ -100,38 +102,7 @@ class CourseController {
 			return  res.status(400).render('general/generalEditForm', {
 				pageTitle: 'Course Form',
 				headerTitle: req.params.id ? 'Edit course' : 'Create course',
-				fields: [
-					{ name: 'title', type: 'text', required: true, label: 'Title' },
-					{ name: 'duration', type: 'number', required: true, label: 'Duration (hours)' },
-					{ 
-						name: 'students', 
-						type: 'select', 
-						multiple: true,
-						options: students.map(student => ({
-							id: student._id,
-							name: `${student.name}`
-						})), 
-						label: 'Select Students' 
-					},
-					{
-						name: 'seminars',
-						type: 'dynamic',
-						label: 'Seminars',
-						fields: [
-							{ name: 'topic', type: 'text', label: 'Topic', required: true },
-							{ 	
-								name: 'responsibleStudent',
-								type: 'select',
-								label: 'Responsible Student',
-								options: students.map((student) => ({
-									id: student._id,
-									name: `${student.name}`,
-								})),
-							 },
-							 { name: 'duration',  type: 'number', label: 'Lecture Duration', required: true},
-						]
-					}
-				],
+				fields: CourseController.getFields(students),
 				initialValues: data,
 				errors: errors.array(),
 				submitUrl: '/courses/register' + (req.params.id ? `/${req.params.id}` : ''),
@@ -139,12 +110,24 @@ class CourseController {
 			})
 		}
 		try {
-			const { title, duration, students, seminars } = req.body
-			console.log(students);
+			const { title, duration, students } = req.body
+			const seminars = []
+			Object.keys(req.body).forEach(key => {
+				if(key.startsWith('seminars[') && key.endsWith(']')) {
+					const match = key.match(/seminars\[(\d+)]\[(\w+)]/)
+					if (!match) return
+
+					const [_, index, fieldName] = match
+					const seminarIndex = parseInt(index, 10)
+					if(!seminars[seminarIndex]) {
+						seminars[seminarIndex] = {}
+					}
+					seminars[seminarIndex][fieldName] = req.body[key]
+				}
+			})
+			const filteredSeminars = seminars.flat().filter(seminar => seminar && Object.keys(seminar).length > 0)
 			
-			const dataObj = { title, duration, students,   
-				seminars: seminars ? Object.values(seminars) : []	
-			 }
+			const dataObj = { title, duration, students, seminars: filteredSeminars }
 			if (req.params.id) {
 				await CourseDBService.update(req.params.id, dataObj)
 			} else {
@@ -152,38 +135,11 @@ class CourseController {
 			}
 			res.redirect('/courses')
 		} catch (err) {
+			const { students } = req.body
 			res.status(500).render('general/generalEditForm', {
 				pageTitle: 'Course Form',
 				headerTitle: req.params.id ? 'Edit Course' : 'Create Course',
-				fields: [
-					{ name: 'title', type: 'text', required: true, label: 'Title' },
-					{ name: 'duration', type: 'number', required: true, label: 'Duration (hours)' },
-					{ 
-						name: 'students', 
-						type: 'select', 
-						multiple: true,
-						options: students.map(student => ({
-							id: student._id,
-							name: `${student.name}`
-						})), 
-						label: 'Select Students' },
-						{
-							name: 'seminars',
-							type: 'dynamic',
-							label: 'Seminars',
-							fields: [
-								{ name: 'responsibleStudent',
-									type: 'select',
-									label: 'Responsible Student',
-									options: students.map((student) => ({
-										id: student._id,
-										name: `${student.name}`,
-									})),
-								 },
-								 { name: 'duration',  type: 'number', label: 'Lecture Duration', required: true},
-							]
-						}
-				],
+				fields: CourseController.getFields(students),
 				initialValues: data,
 				errors: [{ msg: err.message }],
 				submitUrl: '/courses/register' + (req.params.id ? `/${req.params.id}` : ''),
@@ -194,8 +150,16 @@ class CourseController {
 
 	static async delete(req, res) {
 		try {
+			const { id } = req.params;
+			if (!ObjectId.isValid(id)) {
+				 return res.status(400).json({ error: 'Invalid course ID' });
+			}
+			const course = await CourseDBService.getById(id);
+			if (!course) {
+				 return res.status(404).json({ error: 'Course not found' });
+			}
 			await CourseDBService.deleteById(req.body.id)
-			res.json({ success: true })
+			res.status(200).json({ success: true })
 		} catch (error) {
 			res.status(500).json({ success: false, message: 'Failed to delete course' })
 		}

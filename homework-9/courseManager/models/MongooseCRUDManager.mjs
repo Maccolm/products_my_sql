@@ -23,7 +23,8 @@ class MongooseCRUDManager {
 					);
 				}
 			});
-			const results = await query.exec();
+			const results = await query.exec()
+			console.log('senimars====>', results.map(doc => doc.seminars));
 			return results.map((doc) => ({
 				...doc.toObject(),
 				students: Array.isArray(doc.students) 
@@ -34,10 +35,11 @@ class MongooseCRUDManager {
 				seminars: Array.isArray(doc.seminars)
 				? doc.seminars.map((seminar) => ({
 					topic: seminar.topic,
-					responsibleStudent: seminar.responsibleStudent?.name || '',
+					responsibleStudent: seminar.responsibleStudent?.name || seminar.name,
 					duration: seminar.duration,
 				}))
 				: [],
+				
 			}));
 		} catch (error) {
 			throw new Error("Error retrieving data: " + error.message);

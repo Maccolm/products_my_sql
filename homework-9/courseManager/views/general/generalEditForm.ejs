@@ -57,25 +57,27 @@
             <% (initialValues[field.name] || []).forEach((item, index) => { %>
               <div class="dynamic-group">
                 <% field.fields.forEach(subField => { %>
-                  <label for="<%= subField.name %>"><%= subField.label %></label>
-                  <% if (subField.type === 'text' || subField.type === 'number') { %>
-                    <input type="<%= subField.type %>" 
-                           name="<%= field.name %>[<%= index %>][<%= subField.name %>]" 
-                           value="<%= item[subField.name] || '' %>" 
-                           <%= subField.required ? 'required' : '' %>>
-                  <% } else if (subField.type === 'select') { %>
-                    <select name="<%= field.name %>[<%= index %>][<%= subField.name %>]">
-                      <% subField.options.forEach(option => { %>
-                        <option value="<%= option.id %>" <%= item[subField.name] === option.id ? 'selected' : '' %> >
-                          <%= option.name %>
-                        </option>
-                      <% }) %>
-                    </select>
-                  <% } %>
-                <% }) %>
+						<div class="form__section">
+							<label for="<%= subField.name %>"><%= subField.label %></label>
+							<% if (subField.type === 'text' || subField.type === 'number') { %>
+							<input type="<%= subField.type %>" 
+										name="<%= field.name %>[<%= index %>][<%= subField.name %>]" 
+										value="<%= item[subField.name] || '' %>" 
+										<%= subField.required ? 'required' : '' %>>
+							<% } else if (subField.type === 'select') { %>
+							<select name="<%= field.name %>[<%= index %>][<%= subField.name %>]">
+								<% subField.options.forEach(option => { %>
+									<option value="<%= option.id %>" <%= item[subField.name] === option.id ? 'selected' : '' %> >
+									<%= option.name %>
+									</option>
+								<% }) %>
+							</select>
+							<% } %>
+							<% }) %>
+						</div>
               </div>
             <% }) %>
-            <button type="button" class="btn" onclick="addDynamicField('<%= field.name %>', <%- JSON.stringify(field.fields) %>)">
+            <button type="button" class="btn" onclick="addDynamicField('<%= field.name %>', <%= JSON.stringify(field.fields) %>)">
               Add Seminar
             </button>
           </div>
@@ -100,10 +102,12 @@ function addDynamicField(containerId, fields) {
     const fieldWrapper = document.createElement('div');
     fieldWrapper.classList.add('form-group');
 
-    const label = document.createElement('label');
+	 const section = document.createElement('div')
+	 section.className = 'form__section'
+    const label = document.createElement('label')
     label.innerText = field.label;
     label.for = field.name;
-    fieldWrapper.appendChild(label);
+    section.appendChild(label);
 
     let inputElement;
     if (field.type === 'select') {
@@ -124,7 +128,8 @@ function addDynamicField(containerId, fields) {
     }
 
     inputElement.classList.add('form-control');
-    fieldWrapper.appendChild(inputElement);
+    section.appendChild(inputElement);
+	 fieldWrapper.append(section)
 
     fieldset.appendChild(fieldWrapper);
   });
@@ -132,8 +137,5 @@ function addDynamicField(containerId, fields) {
   container.appendChild(fieldset);
 }
  </script>
- 
- 
 </body>
-
 </html>
