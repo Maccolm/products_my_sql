@@ -15,14 +15,12 @@ class CourseDBService extends MongooseCRUDManager {
 
 	static async getList(filters) {
 		try {
-			const res = await super.getList(filters,
+			const res = await super.getList(filters, null,
 				[
-					'students',
 					{
-						fieldForPopulation: 'students.student',
+						fieldForPopulation: 'students',
 						requiredFieldsFromTargetObject: 'name',
 					},
-					'seminars', 
 					{
 						fieldForPopulation: 'seminars.responsibleStudent',
 						requiredFieldsFromTargetObject: 'name',

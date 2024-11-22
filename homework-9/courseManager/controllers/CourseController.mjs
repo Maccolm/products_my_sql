@@ -128,6 +128,8 @@ class CourseController {
 			const filteredSeminars = seminars.flat().filter(seminar => seminar && Object.keys(seminar).length > 0)
 			
 			const dataObj = { title, duration, students, seminars: filteredSeminars }
+			console.log('dataObj ==>',dataObj);
+			
 			if (req.params.id) {
 				await CourseDBService.update(req.params.id, dataObj)
 			} else {
