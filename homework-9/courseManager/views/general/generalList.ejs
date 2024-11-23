@@ -35,7 +35,7 @@
             <% } %>
             <td>
               <a class="btn" href="<%= editLinkBase %>/<%= course._id %>">Edit</a>
-           	<button class="btn" onclick="RequestManager.deleteRequest('/courses/<%= course._id %>')">Delete</button>
+           	<button class="btn" onclick="RequestManager.deleteRequest('<%= deleteRoute %>', '<%= course._id %>')">Delete</button>
             </td>
           </tr>
         <% }); %>

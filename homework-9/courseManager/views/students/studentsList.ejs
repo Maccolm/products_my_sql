@@ -33,7 +33,7 @@
 				<td><%= student.averageScore %></td>
 				<td>
 					<a href="/students/register/<%= student._id %>" class="btn">Edit</a>
-					<button class="btn" onclick="RequestManager.deleteRequest('/students/<%= student._id %>')">Delete</button>
+					<button class="btn" onclick="RequestManager.deleteRequest('/students', '<%= student._id %>')">Delete</button>
 				</td>
 			</tr>
 		<% }) %>

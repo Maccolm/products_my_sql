@@ -57,17 +57,25 @@ class RequestManager {
 	}
  
 	static async deleteRequest(route, id) {
-	  const response = await fetch(route, {
-		 method: 'DELETE',
-		 headers: {
-			'Content-Type': 'application/json',
-		 },
-		 body: JSON.stringify({ id }),
-	  })
-	  const data = await response.json()
-	  // Оновлення поточного вікна без використання кешу
-	  window.location.reload(true)
-	  return data
+		try{
+			const response = await fetch(`${route}/${id}`, {
+			  method: 'DELETE',
+			  headers: {
+				 'Content-Type': 'application/json',
+			  },
+			})
+			if (!response.ok) {
+				throw new Error(`Error: ${response.status}`)
+			}
+			const data = await response.json()
+
+			console.log('response====>', data);
+			window.location.reload(true)
+			return data
+			
+		} catch(error) {
+			console.error(error)
+		}
 	}
  
 	static handleFileSelect(event, imgSelector) {

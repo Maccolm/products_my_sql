@@ -13,7 +13,7 @@ class CourseDBService extends MongooseCRUDManager {
 		}
 	}
 
-	static async getList(filters) {
+	 async getList(filters) {
 		try {
 			const res = await super.getList(filters, null,
 				[

@@ -1,7 +1,7 @@
 import CourseDBService from "../models/CourseDBService.mjs"
 import StudentDBService from '../models/StudentDBService.mjs'
 import { validationResult } from 'express-validator';
-
+import mongoose from "mongoose"
 
 class CourseController {
 	static getFields(students) {
@@ -56,7 +56,7 @@ class CourseController {
 				data: courses.map(course => ({
 					...course,
 					students: course.students.map(student => student.name).join(', '),
-					seminars: course.seminars.map(seminar => `${seminar.topic} (Duration: ${seminar.duration} hours, ${seminar.responsibleStudent?.name})`).join(', ')
+					seminars: course.seminars.map(seminar => `${seminar.topic} (Duration: ${seminar.duration} hours, ${seminar.responsibleStudent})`).join(', ')
 				})),
 				addNewRoute: 'courses/register',
 				addNewStudent: 'students/register',
@@ -153,16 +153,16 @@ class CourseController {
 	static async delete(req, res) {
 		try {
 			const { id } = req.params;
+			console.log('id===>', id);
+			const ObjectId = mongoose.Types.ObjectId
 			if (!ObjectId.isValid(id)) {
 				 return res.status(400).json({ error: 'Invalid course ID' });
 			}
-			const course = await CourseDBService.getById(id);
-			if (!course) {
-				 return res.status(404).json({ error: 'Course not found' });
-			}
-			await CourseDBService.deleteById(req.body.id)
+			await CourseDBService.deleteById(id)
 			res.status(200).json({ success: true })
 		} catch (error) {
+			console.log(error)
+			
 			res.status(500).json({ success: false, message: 'Failed to delete course' })
 		}
 	}
