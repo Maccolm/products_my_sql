@@ -34,8 +34,10 @@
               <td class="row"><%= course[field] %></td>
             <% } %>
             <td>
-              <a class="btn" href="<%= editLinkBase %>/<%= course._id %>">Edit</a>
-           	<button class="btn" onclick="RequestManager.deleteRequest('<%= deleteRoute %>', '<%= course._id %>')">Delete</button>
+              <div class="actions__container">
+					<a class="btn" href="<%= editLinkBase %>/<%= course._id %>">Edit</a>
+					<button class="btn" onclick="RequestManager.deleteRequest('<%= deleteRoute %>', '<%= course._id %>')">Delete</button>
+				  </div>
             </td>
           </tr>
         <% }); %>

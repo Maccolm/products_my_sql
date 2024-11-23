@@ -15,7 +15,13 @@ a {
 }
 .actions__container{
 	display: flex;
-	gap: 25px;
+	gap: 15px;
+	text-align: center;
+}
+@media screen and (max-width: 936px) {
+	.actions__container {
+		flex-direction: column;
+	}
 }
 .form-container {
 	padding-top: 15px;
